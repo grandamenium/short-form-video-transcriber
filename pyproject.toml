@@ -1,0 +1,47 @@
+[project]
+name = "short-form-video-transcriber"
+version = "0.1.0"
+description = "Scrape, transcribe, and summarize short-form videos from TikTok/Instagram into actionable tips"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "James Goldbach"}
+]
+keywords = ["tiktok", "instagram", "transcription", "whisper", "claude", "video"]
+
+dependencies = [
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "tenacity>=8.0",
+    "openai-whisper>=20231117",
+]
+
+[project.optional-dependencies]
+api = [
+    "anthropic>=0.18.0",
+]
+dev = [
+    "pytest>=9.0",
+    "pytest-asyncio",
+    "pytest-cov",
+    "anthropic>=0.18.0",
+]
+
+[project.scripts]
+scrape-videos = "short_form_scraper.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: integration tests requiring network",
+    "slow: slow tests (full pipeline)",
+]
+testpaths = ["tests"]
+pythonpath = ["src"]
