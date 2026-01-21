@@ -108,7 +108,13 @@ After transcripts are generated, YOU (Claude Code) will:
    - **Key Tips**: 3-5 actionable bullet points
    - **Details**: Additional context
 
-3. Create summary files in `summaries/{topic}/{video-id}.md`:
+3. Create summary files in `summaries/{topic}/{slugified-title}.md`:
+
+   **IMPORTANT: Filename from Video Title**
+   - Extract the video title from the yt-dlp metadata (stored in transcript header as "Title: ...")
+   - Convert to kebab-case slug: lowercase, spaces to dashes, remove special chars
+   - Example: "How to Use Context Windows" → `how-to-use-context-windows.md`
+   - Example: "Claude Code Tips & Tricks!" → `claude-code-tips-tricks.md`
    ```markdown
    ---
    video_id: {id}
