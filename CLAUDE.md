@@ -2,89 +2,82 @@
 
 A pipeline to scrape, transcribe, and summarize short-form videos from TikTok into actionable insights.
 
-## Quick Start with /start Command
+## Quick Start
 
-The easiest way to use this project is with the `/start` command which orchestrates everything:
+Open this project with Claude Code and run:
 
 ```
 /start
 ```
 
 This will:
-1. Set up the Python environment
-2. Run tests to verify installation
-3. Ask you for the TikTok profile to process
-4. Download and transcribe videos
-5. Analyze transcripts and create organized summaries
+1. Check and set up your environment
+2. Explain all available commands
+3. Guide you through using the project
 
-**No API keys required!** Claude Code handles the summarization directly.
+**No API keys required!** Everything runs locally or through Claude Code.
 
-## Manual Setup
+## Available Commands
 
-If you prefer manual control:
+| Command | Description |
+|---------|-------------|
+| `/start` | Set up the project and see all available commands |
+| `/bulk` | Transcribe ALL videos from a TikTok profile |
+| `/transcribe` | Transcribe specific video URL(s) you paste |
+| `/skillify` | Turn a summary into a reusable Claude skill |
 
-```bash
-# Clone and enter project
-git clone https://github.com/grandamenium/short-form-video-transcriber.git
-cd short-form-video-transcriber
+### `/start` - First Time Setup
 
-# Create virtual environment
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+Run this first! It will:
+- Check prerequisites (Python, yt-dlp, ffmpeg)
+- Create virtual environment
+- Install dependencies
+- Run tests to verify installation
+- Explain how to use the project
 
-# Install dependencies
-pip install -e ".[dev]"
+### `/bulk` - Process Entire Profile
 
-# Copy environment template (optional customization)
-cp .env.example .env
+Transcribe all videos from a TikTok profile:
 
-# Run tests
-pytest tests/unit/ -v
-```
+1. Run `/bulk`
+2. Paste the profile URL (e.g., `https://www.tiktok.com/@agentic.james`)
+3. Choose how many videos to process (all or a specific number)
+4. Claude Code downloads, transcribes, and summarizes everything
 
-## Project Architecture
+### `/transcribe` - Process Specific Videos
 
-```
-src/short_form_scraper/
-├── cli.py              # CLI entry point
-├── config.py           # Configuration (pydantic-settings)
-├── models.py           # Data models
-├── scraper/tiktok.py   # yt-dlp URL extraction
-├── downloader/video.py # Audio download
-├── transcriber/whisper.py  # Whisper transcription
-├── summarizer/claude.py    # API-based summarization (optional)
-├── organizer/output.py     # File organization
-└── pipeline/runner.py      # Pipeline orchestration
-```
+Transcribe one or more specific videos:
 
-## Data Flow
+1. Run `/transcribe`
+2. Paste the video URL(s):
+   ```
+   https://www.tiktok.com/@username/video/123456789
+   https://www.tiktok.com/@username/video/987654321
+   ```
+3. Claude Code processes each video
 
-```
-TikTok Profile URL
-    │
-    ▼ yt-dlp --flat-playlist
-List[VideoMetadata]
-    │
-    ▼ yt-dlp -x --audio-format mp3
-audio.mp3
-    │
-    ▼ whisper.transcribe()
-transcript: str
-    │
-    ▼ Claude Code (via /start) OR Claude API
-summaries/{topic}/summary_*.md
-```
+**Tip**: You can also just paste TikTok URLs directly without running a command - Claude Code will automatically transcribe them.
+
+### `/skillify` - Create Claude Skills
+
+Turn summaries into reusable Claude skills:
+
+1. Run `/skillify`
+2. Select a summary (or paste content)
+3. Claude Code researches the topic for additional depth
+4. Choose where to save (global `~/.claude/skills/` or project-local)
+5. Get a properly formatted skill file
+
+Great for building a personal knowledge base from video content!
 
 ## Output Structure
 
-After running `/start`:
-
 ```
 transcripts/
-├── {video_id}.txt      # Raw transcripts
+├── {video_id}.txt           # Raw transcripts with metadata
 
 summaries/
-├── INDEX.md            # Master index
+├── INDEX.md                 # Master index of all summaries
 ├── agentic-engineering/
 │   └── {video_id}.md
 ├── context-management/
@@ -93,14 +86,45 @@ summaries/
     └── {video_id}.md
 ```
 
-## Key Files
+## Manual CLI Usage
 
-- **`pipeline/runner.py`** - Main orchestration logic
-- **`config.py`** - Settings via environment variables (all optional)
-- **`models.py`** - `VideoMetadata`, `VideoResult`
-- **`.claude/skills/start/SKILL.md`** - The /start command definition
+For advanced users who prefer command line:
 
-## Environment Variables (All Optional)
+```bash
+# Activate environment
+source .venv/bin/activate
+
+# Process videos (download + transcribe only, no summarization)
+scrape-videos "https://www.tiktok.com/@username" --limit 5
+
+# Process single video
+scrape-videos "https://www.tiktok.com/@username" --single "https://www.tiktok.com/@username/video/123"
+```
+
+## Project Structure
+
+```
+.claude/skills/
+├── start/SKILL.md      # /start command
+├── bulk/SKILL.md       # /bulk command
+├── transcribe/SKILL.md # /transcribe command
+└── skillify/SKILL.md   # /skillify command
+
+src/short_form_scraper/
+├── cli.py              # CLI entry point
+├── config.py           # Configuration
+├── models.py           # Data models
+├── scraper/            # TikTok URL extraction
+├── downloader/         # Audio download
+├── transcriber/        # Whisper transcription
+├── summarizer/         # API-based summarization (optional)
+├── organizer/          # File organization
+└── pipeline/           # Orchestration
+```
+
+## Environment Variables (Optional)
+
+All settings have defaults. Customize in `.env`:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
@@ -112,31 +136,15 @@ summaries/
 ## Testing
 
 ```bash
-# Unit tests (no network)
+source .venv/bin/activate
 pytest tests/unit/ -v
-
-# Integration tests (requires network)
-pytest tests/integration/ -v -s
 ```
 
-## Common Tasks
+## Prerequisites
 
-### Process specific profile
-```bash
-scrape-videos "https://www.tiktok.com/@username" --limit 5
-```
-
-### Reset and reprocess
-```bash
-rm -rf state/ transcripts/ summaries/
-/start
-```
-
-### Use larger Whisper model for better accuracy
-Edit `.env`:
-```
-WHISPER_MODEL=large
-```
+- Python 3.10+
+- yt-dlp (`brew install yt-dlp`)
+- ffmpeg (`brew install ffmpeg`)
 
 ## Troubleshooting
 
@@ -152,10 +160,4 @@ brew install ffmpeg  # macOS
 ```
 
 ### Slow transcription
-Use smaller model: `WHISPER_MODEL=tiny`
-
-## Dependencies
-
-- **yt-dlp** - Video/audio downloading (install separately)
-- **openai-whisper** - Local transcription (no API key)
-- **ffmpeg** - Audio processing (install separately)
+Use smaller model: edit `.env` and set `WHISPER_MODEL=tiny`
