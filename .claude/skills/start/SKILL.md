@@ -1,154 +1,157 @@
 ---
 name: start
-description: Orchestrate the full video transcription and summarization workflow. Use when setting up the project or processing videos.
+description: Set up the project and learn how to use it. Run this first when opening the project.
 user_invocable: true
 ---
 
-# Short-Form Video Transcriber - Start Orchestration
+# Short-Form Video Transcriber - Start
 
-This skill orchestrates the complete workflow for scraping, transcribing, and summarizing short-form videos using Claude Code.
+When the user runs `/start`, follow this workflow:
 
-## Workflow Steps
+## Step 1: Welcome Message
 
-When the user invokes `/start`, execute the following steps in order:
+Display this welcome message:
 
-### Step 1: Environment Check & Setup
+---
 
-1. Check if running in the project directory (`short-form-socials-scraping` or `short-form-video-transcriber`)
-2. If not in project directory, inform user and exit
-3. Check if virtual environment exists (`.venv/`)
-4. If no venv, create it: `python -m venv .venv`
-5. Activate venv and install dependencies: `pip install -e ".[dev]"`
+**Welcome to the Short-Form Video Transcriber!**
 
-### Step 2: Verify Installation
+This project helps you:
+- Scrape videos from TikTok profiles
+- Transcribe audio to text using AI (Whisper)
+- Create organized summaries by topic
 
-1. Run unit tests to verify installation: `pytest tests/unit/ -v`
-2. If tests fail, report errors and stop
-3. Confirm yt-dlp is available: `which yt-dlp`
-4. If yt-dlp missing, instruct user to install: `brew install yt-dlp` or `pip install yt-dlp`
+Let me check if your environment is set up...
 
-### Step 3: Get User Configuration
+---
 
-Ask the user:
-1. **TikTok Profile URL**: What TikTok profile do you want to process? (default: https://www.tiktok.com/@agentic.james)
-2. **Video Limit**: How many videos to process? (default: all, or specify a number like 5)
+## Step 2: Environment Check
 
-### Step 4: Scrape and Download Videos
+Run these checks:
 
-1. Run the scraper to get video URLs:
-   ```bash
-   source .venv/bin/activate && python -c "
-   from short_form_scraper.scraper.tiktok import TikTokScraper
-   scraper = TikTokScraper('PROFILE_URL')
-   videos = list(scraper.get_video_urls(limit=LIMIT))
-   print(f'Found {len(videos)} videos')
-   for v in videos:
-       print(f'{v.id}: {v.title}')
-   "
-   ```
+```bash
+# Check Python
+python3 --version
 
-2. For each video, download and transcribe:
-   ```bash
-   source .venv/bin/activate && python -c "
-   from short_form_scraper.scraper.tiktok import TikTokScraper
-   from short_form_scraper.downloader.video import VideoDownloader
-   from short_form_scraper.transcriber.whisper import WhisperTranscriber
-   from pathlib import Path
+# Check yt-dlp
+which yt-dlp
 
-   scraper = TikTokScraper('PROFILE_URL')
-   downloader = VideoDownloader()
-   transcriber = WhisperTranscriber()
+# Check ffmpeg
+which ffmpeg
 
-   videos = list(scraper.get_video_urls(limit=LIMIT))
+# Check if venv exists
+ls -la .venv/bin/activate 2>/dev/null || echo "NO_VENV"
+```
 
-   for metadata in videos:
-       print(f'Processing: {metadata.title}')
+### If prerequisites missing:
 
-       # Download
-       audio_path = downloader.download(metadata.url, Path(f'state/audio_{metadata.id}'))
+Tell the user what to install:
+- **yt-dlp missing**: "Install with: `brew install yt-dlp` or `pip install yt-dlp`"
+- **ffmpeg missing**: "Install with: `brew install ffmpeg`"
 
-       # Transcribe
-       transcript = transcriber.transcribe(audio_path)
+### If venv doesn't exist:
 
-       # Save transcript
-       transcript_dir = Path('transcripts')
-       transcript_dir.mkdir(exist_ok=True)
-       transcript_file = transcript_dir / f'{metadata.id}.txt'
-       transcript_file.write_text(f'Title: {metadata.title}\\nURL: {metadata.url}\\n\\n{transcript}')
-       print(f'Saved: {transcript_file}')
-   "
-   ```
+Create and set up the environment:
 
-### Step 5: Summarize Transcripts (Claude Code)
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
 
-After transcripts are generated, YOU (Claude Code) will:
+### If venv exists:
 
-1. Read each transcript file from `transcripts/` directory
-2. For each transcript, analyze and extract:
-   - **Topic**: A descriptive 2-4 word kebab-case topic name
-   - **Summary**: One-sentence summary of the main point
-   - **Key Tips**: 3-5 actionable bullet points
-   - **Details**: Additional context
+Verify it works:
 
-3. Create organized output in `summaries/` directory:
-   ```
-   summaries/
-   ├── {topic-name}/
-   │   └── {video-id}.md
-   ```
+```bash
+source .venv/bin/activate
+pytest tests/unit/ -v --tb=short 2>&1 | tail -5
+```
 
-4. Each summary file should contain:
-   ```markdown
-   ---
-   video_id: {id}
-   title: {title}
-   url: {url}
-   topic: {topic}
-   ---
+## Step 3: Explain Available Commands
 
-   # {Title}
+After setup is verified, explain the commands:
 
-   ## Summary
-   {one-sentence summary}
+---
 
-   ## Key Tips
-   - {tip 1}
-   - {tip 2}
-   - {tip 3}
+**Setup complete! Here's how to use this project:**
 
-   ## Details
-   {additional context}
+### Available Commands
 
-   ## Full Transcript
-   {original transcript}
-   ```
+| Command | What it does |
+|---------|--------------|
+| `/start` | You're here! Set up the project and see available commands |
+| `/bulk` | Transcribe ALL videos from a TikTok profile |
+| `/transcribe` | Transcribe specific video URL(s) you paste |
+| `/skillify` | Turn a summary into a reusable Claude skill |
 
-5. Create an INDEX.md in summaries/ listing all summaries by topic
+### `/bulk` - Process Entire Profile
 
-### Step 6: Report Results
+Use this when you want to transcribe all videos from someone's TikTok.
 
-After completion, report:
-- Number of videos processed
-- Number of transcripts created
-- Number of summaries organized
-- Topics identified
-- Location of output files
+Just run `/bulk` and I'll ask you for:
+1. The TikTok profile URL (e.g., `https://www.tiktok.com/@agentic.james`)
+2. How many videos to process (all, or a specific number)
+
+I'll then download, transcribe, and summarize each video automatically.
+
+### `/transcribe` - Process Specific Videos
+
+Use this when you have specific video URLs you want to transcribe.
+
+Just run `/transcribe` and paste the URLs:
+```
+https://www.tiktok.com/@username/video/123456789
+https://www.tiktok.com/@username/video/987654321
+```
+
+You can paste one URL or multiple URLs at once.
+
+### `/skillify` - Create Claude Skills from Summaries
+
+Turn any summary into a reusable Claude skill! This command:
+1. Takes a transcript summary you've created
+2. Researches the topic with web search to add depth
+3. Creates a properly formatted Claude skill file
+4. Saves it to your skills directory (global or project-local)
+
+Great for building a knowledge base from video content!
+
+### Output
+
+All commands create:
+- `transcripts/` - Raw transcripts with metadata
+- `summaries/` - Organized summaries grouped by topic
+- `summaries/INDEX.md` - Master index of all content
+- Skills created via `/skillify` go to your chosen directory
+
+---
+
+**What would you like to do?**
+- Run `/bulk` to process an entire TikTok profile
+- Run `/transcribe` to process specific video URLs
+- Run `/skillify` to turn a summary into a Claude skill
+- Or just paste some TikTok URLs and I'll transcribe them for you!
+
+---
+
+## Step 4: Handle User's Next Action
+
+After explaining, wait for the user to either:
+1. Run `/bulk` or `/transcribe`
+2. Paste video URLs directly (treat this as running `/transcribe`)
+3. Ask questions
+
+If they paste URLs directly without a command, process them as if they ran `/transcribe`.
 
 ## Error Handling
 
-- If any step fails, report the error clearly
-- Offer to retry or skip problematic videos
-- Always save partial progress (transcripts saved immediately after creation)
+If setup fails:
+- Show clear error message
+- Suggest specific fix
+- Offer to retry
 
-## Example Invocation
-
-User: `/start`
-
-Claude Code:
-1. Checks environment
-2. Sets up venv if needed
-3. Runs tests
-4. Asks for profile URL and limit
-5. Downloads and transcribes videos
-6. Reads transcripts and creates summaries
-7. Reports results
+If tests fail:
+- Show which tests failed
+- Check if dependencies are installed correctly
+- Suggest reinstalling with `pip install -e ".[dev]"`

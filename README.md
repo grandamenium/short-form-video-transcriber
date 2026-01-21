@@ -2,17 +2,9 @@
 
 Scrape, transcribe, and summarize short-form videos from TikTok into organized, actionable insights.
 
-**Works with Claude Code** - No API keys required for the full workflow!
+**Works with Claude Code** - No API keys required!
 
-## Features
-
-- **Scrape** video URLs from TikTok profiles using yt-dlp
-- **Download** and extract audio from videos
-- **Transcribe** audio to text using OpenAI Whisper (runs locally)
-- **Summarize** transcripts using Claude Code (via `/start` command)
-- **Organize** output into topic-named folders
-
-## Quick Start with Claude Code
+## Quick Start
 
 1. Clone the repository:
    ```bash
@@ -25,21 +17,59 @@ Scrape, transcribe, and summarize short-form videos from TikTok into organized, 
    /start
    ```
 
-That's it! The `/start` command will:
-- Set up your Python environment
-- Install all dependencies
-- Run tests to verify everything works
-- Guide you through processing videos
-- Create organized summaries
+That's it! Claude Code will set everything up and explain how to use the project.
 
-## Output Structure
+## Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `/start` | Set up the project and see all available commands |
+| `/bulk` | Transcribe ALL videos from a TikTok profile |
+| `/transcribe` | Transcribe specific video URL(s) you paste |
+| `/skillify` | Turn a summary into a reusable Claude skill |
+
+### `/bulk` - Process Entire Profile
+
+Want to transcribe every video from a TikTok account?
+
+1. Run `/bulk`
+2. Paste the profile URL: `https://www.tiktok.com/@username`
+3. Choose how many videos (all, or a specific number)
+4. Wait while Claude Code processes everything
+
+### `/transcribe` - Process Specific Videos
+
+Have specific videos you want to transcribe?
+
+1. Run `/transcribe`
+2. Paste the URL(s):
+   ```
+   https://www.tiktok.com/@username/video/123456789
+   https://www.tiktok.com/@username/video/987654321
+   ```
+
+**Pro tip**: You can also just paste TikTok URLs directly - Claude Code will automatically transcribe them!
+
+### `/skillify` - Create Claude Skills
+
+Turn your summaries into reusable Claude skills:
+
+1. Run `/skillify`
+2. Pick a summary or paste content
+3. Claude Code researches the topic for additional depth
+4. Choose where to save the skill
+5. Get a formatted skill file for future use
+
+Build a knowledge base from video content!
+
+## Output
 
 ```
 transcripts/
 ├── {video_id}.txt           # Raw transcripts
 
 summaries/
-├── INDEX.md                 # Master index of all summaries
+├── INDEX.md                 # Master index
 ├── agentic-engineering/
 │   └── {video_id}.md
 ├── context-management/
@@ -53,37 +83,17 @@ summaries/
 - **Python 3.10+**
 - **yt-dlp** - `brew install yt-dlp` or `pip install yt-dlp`
 - **ffmpeg** - `brew install ffmpeg`
-- **Claude Code** - For the `/start` orchestration
+- **Claude Code** - For the slash commands
 
-## Manual Installation
+## Manual Setup (Optional)
 
-If you prefer manual setup:
+If you prefer manual control:
 
 ```bash
-# Create virtual environment
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-# Install dependencies
+source .venv/bin/activate
 pip install -e ".[dev]"
-
-# Copy environment template (optional)
-cp .env.example .env
-
-# Run tests
 pytest tests/unit/ -v
-```
-
-## CLI Usage
-
-For manual processing without Claude Code:
-
-```bash
-# Process videos (downloads and transcribes only)
-scrape-videos "https://www.tiktok.com/@username" --limit 5
-
-# Test with a single video
-scrape-videos "https://www.tiktok.com/@username" --single "https://www.tiktok.com/@username/video/123456"
 ```
 
 ## Configuration (Optional)
@@ -91,55 +101,43 @@ scrape-videos "https://www.tiktok.com/@username" --single "https://www.tiktok.co
 All settings have sensible defaults. Customize in `.env`:
 
 ```bash
-# Whisper model size (tiny, base, small, medium, large)
-WHISPER_MODEL=base
-
-# Output directories
+WHISPER_MODEL=base     # tiny, base, small, medium, large
 OUTPUT_DIR=./output
 STATE_DIR=./state
-
-# Skip already processed videos
 SKIP_EXISTING=true
 ```
 
 ## How It Works
 
-1. **Scraping**: Uses yt-dlp to extract video metadata from TikTok profiles
-2. **Downloading**: Extracts audio as MP3 using yt-dlp
+1. **Scraping**: Uses yt-dlp to get video metadata from TikTok
+2. **Downloading**: Extracts audio as MP3
 3. **Transcription**: Runs OpenAI Whisper locally (no API needed)
-4. **Summarization**: Claude Code analyzes transcripts and extracts:
+4. **Summarization**: Claude Code analyzes transcripts and creates organized summaries with:
    - Topic classification
-   - One-sentence summary
    - Key actionable tips
-   - Additional context
+   - Full transcript
 
 ## Project Structure
 
 ```
-src/short_form_scraper/
-├── cli.py              # Command-line interface
-├── config.py           # Settings management
-├── models.py           # Data models
-├── scraper/            # TikTok URL extraction
-├── downloader/         # Audio download
-├── transcriber/        # Whisper transcription
-├── summarizer/         # API-based summarization (optional)
-├── organizer/          # File organization
-└── pipeline/           # Orchestration
+.claude/skills/
+├── start/       # /start command
+├── bulk/        # /bulk command
+├── transcribe/  # /transcribe command
+└── skillify/    # /skillify command
 
-.claude/
-└── skills/
-    └── start/          # /start command definition
+src/short_form_scraper/
+├── scraper/     # TikTok URL extraction
+├── downloader/  # Audio download
+├── transcriber/ # Whisper transcription
+└── ...
 ```
 
 ## Running Tests
 
 ```bash
-# Unit tests (fast, no network)
+source .venv/bin/activate
 pytest tests/unit/ -v
-
-# All tests
-pytest -v
 ```
 
 ## Troubleshooting
@@ -152,21 +150,11 @@ pip install yt-dlp   # any platform
 
 ### "ffmpeg not found"
 ```bash
-brew install ffmpeg  # macOS
-# See https://ffmpeg.org/download.html for other platforms
+brew install ffmpeg
 ```
 
 ### Slow transcription
-Use a smaller Whisper model:
-```bash
-# In .env
-WHISPER_MODEL=tiny
-```
-
-### Rate limiting
-TikTok may rate limit requests. Solutions:
-- Add delays between videos
-- Use cookies from a logged-in browser session
+Use smaller model: `WHISPER_MODEL=tiny` in `.env`
 
 ## License
 
@@ -176,4 +164,4 @@ MIT
 
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) - Video downloading
 - [OpenAI Whisper](https://github.com/openai/whisper) - Transcription
-- [Claude Code](https://claude.ai/code) - Orchestration and summarization
+- [Claude Code](https://claude.ai/code) - Orchestration
