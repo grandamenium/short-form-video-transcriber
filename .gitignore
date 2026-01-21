@@ -34,6 +34,11 @@ state/
 
 # Output (large media files)
 output/
+transcripts/
+summaries/
+
+# User configuration
+accounts.json
 
 # IDE
 .vscode/

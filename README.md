@@ -26,6 +26,7 @@ That's it! Claude Code will set everything up and explain how to use the project
 | `/start` | Set up the project and see all available commands |
 | `/bulk` | Transcribe ALL videos from a TikTok profile |
 | `/transcribe` | Transcribe specific video URL(s) you paste |
+| `/accounts` | Switch profiles, add multiple accounts, process several |
 | `/skillify` | Turn a summary into a reusable Claude skill |
 
 ### `/bulk` - Process Entire Profile
@@ -49,6 +50,14 @@ Have specific videos you want to transcribe?
    ```
 
 **Pro tip**: You can also just paste TikTok URLs directly - Claude Code will automatically transcribe them!
+
+### `/accounts` - Manage Multiple Profiles
+
+Want to scrape from different TikTok accounts?
+
+1. Run `/accounts`
+2. Switch profiles, add new ones, or process multiple at once
+3. Saved to `accounts.json`
 
 ### `/skillify` - Create Claude Skills
 
@@ -124,6 +133,7 @@ SKIP_EXISTING=true
 ├── start/       # /start command
 ├── bulk/        # /bulk command
 ├── transcribe/  # /transcribe command
+├── accounts/    # /accounts command
 └── skillify/    # /skillify command
 
 src/short_form_scraper/

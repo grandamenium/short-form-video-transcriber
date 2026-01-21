@@ -83,6 +83,7 @@ After setup is verified, explain the commands:
 | `/start` | You're here! Set up the project and see available commands |
 | `/bulk` | Transcribe ALL videos from a TikTok profile |
 | `/transcribe` | Transcribe specific video URL(s) you paste |
+| `/accounts` | Switch profiles, add multiple accounts, process several at once |
 | `/skillify` | Turn a summary into a reusable Claude skill |
 
 ### `/bulk` - Process Entire Profile
@@ -106,6 +107,16 @@ https://www.tiktok.com/@username/video/987654321
 ```
 
 You can paste one URL or multiple URLs at once.
+
+### `/accounts` - Manage Multiple Profiles
+
+Want to scrape from different TikTok accounts? Use `/accounts` to:
+- Switch to a different profile
+- Add multiple profiles to your list
+- Process several profiles at once
+- Remove profiles you no longer need
+
+Your saved profiles are stored in `accounts.json`.
 
 ### `/skillify` - Create Claude Skills from Summaries
 
