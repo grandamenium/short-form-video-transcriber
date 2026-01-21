@@ -137,8 +137,14 @@ After all transcripts are generated, YOU (Claude Code) will:
    summaries/
    ├── INDEX.md
    ├── {topic-name}/
-   │   └── {video-id}.md
+   │   └── {slugified-title}.md
    ```
+
+   **IMPORTANT: Filename from Video Title**
+   - Extract the video title from the yt-dlp metadata (stored in the transcript file header)
+   - Convert to kebab-case slug: lowercase, spaces to dashes, remove special chars
+   - Example: "How to Use Context Windows" → `how-to-use-context-windows.md`
+   - Example: "Claude Code Tips & Tricks!" → `claude-code-tips-tricks.md`
 
 4. Each summary file format:
    ```markdown
@@ -166,7 +172,13 @@ After all transcripts are generated, YOU (Claude Code) will:
    {original transcript}
    ```
 
-5. Create INDEX.md listing all summaries grouped by topic
+5. Create INDEX.md listing all summaries grouped by topic:
+   ```markdown
+   # Video Summaries Index
+
+   ## {Topic Name}
+   - [{Video Title}](./{topic-name}/{slugified-title}.md)
+   ```
 
 ### Step 7: Report Results
 
