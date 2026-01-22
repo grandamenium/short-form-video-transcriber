@@ -15,6 +15,7 @@ dependencies = [
     "pydantic-settings>=2.0",
     "tenacity>=8.0",
     "openai-whisper>=20231117",
+    "yt-dlp>=2024.0.0",
 ]
 
 [project.optional-dependencies]

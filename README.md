@@ -90,9 +90,33 @@ summaries/
 ## Prerequisites
 
 - **Python 3.10+**
-- **yt-dlp** - `brew install yt-dlp` or `pip install yt-dlp`
-- **ffmpeg** - `brew install ffmpeg`
+- **ffmpeg** - Required for audio extraction (see below)
 - **Claude Code** - For the slash commands
+
+**Note:** yt-dlp is installed automatically with the Python dependencies.
+
+### Installing ffmpeg
+
+**macOS:**
+```bash
+brew install ffmpeg
+```
+
+**Linux (Debian/Ubuntu):**
+```bash
+sudo apt update && sudo apt install ffmpeg
+```
+
+**Linux (Fedora/RHEL):**
+```bash
+sudo dnf install ffmpeg
+```
+
+**Windows:**
+```powershell
+winget install ffmpeg
+```
+Or download from https://ffmpeg.org/download.html and add to PATH.
 
 ## Manual Setup (Optional)
 
@@ -153,18 +177,20 @@ pytest tests/unit/ -v
 ## Troubleshooting
 
 ### "yt-dlp not found"
+yt-dlp should be installed automatically. If not:
 ```bash
-brew install yt-dlp  # macOS
-pip install yt-dlp   # any platform
+source .venv/bin/activate
+pip install yt-dlp
 ```
 
 ### "ffmpeg not found"
-```bash
-brew install ffmpeg
-```
+See the [Installing ffmpeg](#installing-ffmpeg) section above for platform-specific instructions.
 
 ### Slow transcription
-Use smaller model: `WHISPER_MODEL=tiny` in `.env`
+Use a smaller model by setting `WHISPER_MODEL=tiny` in `.env`
+
+### Windows: "source: command not found"
+Use `.venv\Scripts\activate` instead of `source .venv/bin/activate`
 
 ## License
 

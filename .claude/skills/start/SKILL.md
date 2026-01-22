@@ -33,40 +33,60 @@ Run these checks:
 # Check Python
 python3 --version
 
-# Check yt-dlp
-which yt-dlp
-
 # Check ffmpeg
-which ffmpeg
+which ffmpeg || where ffmpeg
 
 # Check if venv exists
 ls -la .venv/bin/activate 2>/dev/null || echo "NO_VENV"
 ```
 
-### If prerequisites missing:
-
-Tell the user what to install:
-- **yt-dlp missing**: "Install with: `brew install yt-dlp` or `pip install yt-dlp`"
-- **ffmpeg missing**: "Install with: `brew install ffmpeg`"
-
 ### If venv doesn't exist:
 
-Create and set up the environment:
+Create and set up the environment (this also installs yt-dlp automatically):
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
+pip install yt-dlp  # Install yt-dlp in the venv
 ```
 
 ### If venv exists:
 
-Verify it works:
+Activate and ensure yt-dlp is installed:
 
 ```bash
-source .venv/bin/activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install yt-dlp  # Ensure yt-dlp is available
 pytest tests/unit/ -v --tb=short 2>&1 | tail -5
 ```
+
+### If ffmpeg is missing:
+
+ffmpeg is required for audio extraction. Provide platform-specific instructions:
+
+**macOS:**
+```bash
+brew install ffmpeg
+```
+
+**Linux (Debian/Ubuntu):**
+```bash
+sudo apt update && sudo apt install ffmpeg
+```
+
+**Linux (Fedora/RHEL):**
+```bash
+sudo dnf install ffmpeg
+```
+
+**Windows:**
+```powershell
+winget install ffmpeg
+```
+Or download from https://ffmpeg.org/download.html and add to PATH.
+
+After installing ffmpeg, re-run `/start` to continue setup.
 
 ## Step 3: Explain Available Commands
 
