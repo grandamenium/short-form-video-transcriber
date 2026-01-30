@@ -34,7 +34,7 @@ def sample_metadata():
     """Sample video metadata for testing."""
     return VideoMetadata(
         id="7597629199486029070",
-        url="https://www.tiktok.com/@agentic.james/video/7597629199486029070",
+        url="https://www.tiktok.com/@example_creator/video/7597629199486029070",
         title="Top 3 tips to become an agentic engineer!",
         description="1) 90% effort in planning phase...",
         duration=76,
@@ -59,7 +59,7 @@ def sample_yt_dlp_json():
     """Sample yt-dlp JSON output."""
     return {
         "id": "7597629199486029070",
-        "webpage_url": "https://www.tiktok.com/@agentic.james/video/7597629199486029070",
+        "webpage_url": "https://www.tiktok.com/@example_creator/video/7597629199486029070",
         "title": "Top 3 tips to become an agentic engineer!",
         "description": "1) 90% effort in planning phase...",
         "duration": 76,

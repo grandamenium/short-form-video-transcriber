@@ -111,7 +111,7 @@ After setup is verified, explain the commands:
 Use this when you want to transcribe all videos from someone's TikTok.
 
 Just run `/bulk` and I'll ask you for:
-1. The TikTok profile URL (e.g., `https://www.tiktok.com/@agentic.james`)
+1. The TikTok profile URL (e.g., `https://www.tiktok.com/@example_creator`)
 2. How many videos to process (all, or a specific number)
 
 I'll then download, transcribe, and summarize each video automatically.

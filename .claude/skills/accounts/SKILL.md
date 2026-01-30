@@ -62,8 +62,8 @@ Read `accounts.json` and display:
 ```
 Saved Profiles:
 ---------------
-1. @agentic.james (active)
-   https://www.tiktok.com/@agentic.james
+1. @example_creator (active)
+   https://www.tiktok.com/@example_creator
 
 2. @techcreator
    https://www.tiktok.com/@techcreator
@@ -91,11 +91,11 @@ Store profile configuration in project root:
 
 ```json
 {
-  "active": "https://www.tiktok.com/@agentic.james",
+  "active": "https://www.tiktok.com/@example_creator",
   "profiles": [
     {
-      "url": "https://www.tiktok.com/@agentic.james",
-      "name": "agentic.james",
+      "url": "https://www.tiktok.com/@example_creator",
+      "name": "example_creator",
       "added": "2024-01-21"
     },
     {

@@ -15,7 +15,7 @@ This command processes ALL videos from a TikTok profile - scraping URLs, downloa
 Ask the user:
 > What TikTok profile do you want to process?
 >
-> Example: `https://www.tiktok.com/@agentic.james`
+> Example: `https://www.tiktok.com/@example_creator`
 
 ### Step 2: Get Limit (Optional)
 

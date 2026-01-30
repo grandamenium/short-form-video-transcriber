@@ -27,7 +27,7 @@ pytestmark = [
 class TestFullPipeline:
     """Test full pipeline with multiple videos."""
 
-    TEST_PROFILE = "https://www.tiktok.com/@agentic.james"
+    TEST_PROFILE = "https://www.tiktok.com/@example_creator"
 
     @pytest.fixture
     def pipeline_settings(self, tmp_path):

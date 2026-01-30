@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "James Goldbach"}
+    {name = "Anonymous"}
 ]
 keywords = ["tiktok", "instagram", "transcription", "whisper", "claude", "video"]
 

@@ -41,7 +41,7 @@ Run this first! It will:
 Transcribe all videos from a TikTok profile:
 
 1. Run `/bulk`
-2. Paste the profile URL (e.g., `https://www.tiktok.com/@agentic.james`)
+2. Paste the profile URL (e.g., `https://www.tiktok.com/@example_creator`)
 3. Choose how many videos to process (all or a specific number)
 4. Claude Code downloads, transcribes, and summarizes everything
 

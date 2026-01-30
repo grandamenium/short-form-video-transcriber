@@ -25,7 +25,7 @@ class TestSingleVideo:
     """Test full pipeline on ONE video before running full scrape."""
 
     # Use a known video URL from the profile
-    TEST_PROFILE = "https://www.tiktok.com/@agentic.james"
+    TEST_PROFILE = "https://www.tiktok.com/@example_creator"
 
     @pytest.fixture
     def pipeline_settings(self, tmp_path):
@@ -89,7 +89,7 @@ class TestSingleVideo:
 class TestPipelineIdempotency:
     """Test that pipeline correctly skips already processed videos."""
 
-    TEST_PROFILE = "https://www.tiktok.com/@agentic.james"
+    TEST_PROFILE = "https://www.tiktok.com/@example_creator"
 
     @pytest.fixture
     def pipeline_settings(self, tmp_path):

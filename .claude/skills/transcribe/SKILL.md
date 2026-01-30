@@ -158,8 +158,8 @@ Claude: What TikTok video URLs would you like to transcribe?
 
 User:
 ```
-https://www.tiktok.com/@agentic.james/video/7597629199486029070
-https://www.tiktok.com/@agentic.james/video/7597614123362323767
+https://www.tiktok.com/@example_creator/video/7597629199486029070
+https://www.tiktok.com/@example_creator/video/7597614123362323767
 ```
 
 Claude: [Processes each video, creates transcripts and summaries]
